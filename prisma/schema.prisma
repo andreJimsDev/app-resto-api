@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// MODELS
+
+model User {
+  id        String    @id
+  username  String    @unique
+  password  String
+  roles     Role[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+enum Role {
+  SERVEUR
+  ADMIN
+}
+
+model Categorie {
+  id                 Int             @id @default(autoincrement())
+  nom                String          @unique
+  tvaSurPlace        Int
+  tvaEmporte         Int
+  imprimanteTicket   Boolean?
+  imprimanteCuisine1 Boolean?
+  imprimanteCuisine2 Boolean?
+  imprimanteCuisine3 Boolean?
+  imprimanteCuisine4 Boolean?
+  visibleCarte1      Boolean?
+  visibleCarte2      Boolean?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime?
+  sousCategories     SousCategorie[]
+  produits           Produit[]
+}
+
+model SousCategorie {
+  id          String    @id
+  nom         String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  categorie   Categorie @relation(fields: [categorieId], references: [id])
+  categorieId Int
+}
+
+model Produit {
+  id                    Int       @id @default(autoincrement())
+  designation           String    @unique
+  vignette              String?
+  prixAchatHT           Int?
+  prixVenteTC           Int
+  prixEmporteTC         Int
+  refArticleFournisseur String?
+  qteStock              Int?
+  qteMin                Int?
+  cuisson               Boolean?
+  accompagnement        Boolean?
+  gererStock            Boolean?
+  accompagnements       Int[]
+  compositionMenus      Int[]
+  InfosAllergenes       String[]
+  Ingredients           String[]
+  categorie             Categorie @relation(fields: [categorieId], references: [id])
+  categorieId           Int
+}
