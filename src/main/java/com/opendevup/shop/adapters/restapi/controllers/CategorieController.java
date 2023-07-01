@@ -1,5 +1,6 @@
 package com.opendevup.shop.adapters.restapi.controllers;
 
+import com.github.javafaker.Faker;
 import com.opendevup.shop.application.presenters.DeleteOutputBoundary;
 import com.opendevup.shop.application.presenters.categorie.CategorieDetailOutputBoundary;
 import com.opendevup.shop.application.presenters.categorie.CategorieDetailViewModel;
@@ -23,10 +24,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import com.github.javafaker.Faker;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -74,8 +75,8 @@ public class CategorieController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("")
-    public Flux<CategorieViewModel> getAll() {
-        fetchCategoriesUseCase.execute("");
+    public Flux<CategorieViewModel> getAll(@RequestParam(value = "parent", required = false) Long parent) {
+        fetchCategoriesUseCase.execute(parent);
         return categoriesPresenter.getViewModel();
     }
 

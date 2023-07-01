@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateCategorieRequest {
     private String nom;
+    private Long parent;
 }

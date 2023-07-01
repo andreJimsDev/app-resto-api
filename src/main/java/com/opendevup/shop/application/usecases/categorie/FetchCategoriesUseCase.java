@@ -10,14 +10,19 @@ import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class FetchCategoriesUseCase implements UseCase<String> {
+public class FetchCategoriesUseCase implements UseCase<Long> {
 
     private final CategorieDsGateway categorieDsGateway;
     private final CategoriesOutputBoundary presenter;
 
     @Override
-    public void execute(String request) {
-        Flux<Categorie> response = categorieDsGateway.findAll();
+    public void execute(Long parent) {
+        Flux<Categorie> response;
+        if (parent != null) {
+            response = categorieDsGateway.findByParent(parent);
+        } else {
+            response = categorieDsGateway.findAll();
+        }
         presenter.present(response);
     }
 }

@@ -22,7 +22,13 @@ public class JpaCategorieDsGateway implements CategorieDsGateway {
 
     @Override
     public Flux<Categorie> findAll() {
-        return jpaCategorieRepository.findAll()
+        return jpaCategorieRepository.findByParentIsNull()
+                .map(CategorieEntityMapper::toDomain);
+    }
+
+    @Override
+    public Flux<Categorie> findByParent(Long parent) {
+        return jpaCategorieRepository.findByParent(parent)
                 .map(CategorieEntityMapper::toDomain);
     }
 
@@ -38,8 +44,7 @@ public class JpaCategorieDsGateway implements CategorieDsGateway {
 
     @Override
     public Mono<Categorie> findById(Long id) {
-        System.out.println("id : "+id);
-        return jpaCategorieRepository.findById(id)
+       return jpaCategorieRepository.findById(id)
                 .map(CategorieEntityMapper::toDomain);
     }
 }
