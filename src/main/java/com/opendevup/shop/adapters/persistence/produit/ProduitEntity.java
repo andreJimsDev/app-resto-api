@@ -1,13 +1,15 @@
-package com.opendevup.shop.domain;
+package com.opendevup.shop.adapters.persistence.produit;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
 
-@Builder
-@Getter
-public class Produit {
+@Data
+@Table(name = "produits")
+public class ProduitEntity {
+    @Id
     private Long id;
     private String designation;
     private Double prixVente;

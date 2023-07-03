@@ -1,4 +1,4 @@
-package com.opendevup.shop.domain;
+package com.opendevup.shop.application.presenters.produit;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Builder
 @Getter
-public class Produit {
+public class ProduitViewModel {
     private Long id;
     private String designation;
     private Double prixVente;

@@ -1,14 +1,15 @@
-package com.opendevup.shop.domain;
+package com.opendevup.shop.application.usecases.produit;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
-@Builder
 @Getter
-public class Produit {
-    private Long id;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateProduitRequest {
     private String designation;
     private Double prixVente;
     private Double prixEmporte;
@@ -21,6 +22,4 @@ public class Produit {
     private boolean gererStock;
     private Long categorieId;
     private Long fournisseurId;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
 }

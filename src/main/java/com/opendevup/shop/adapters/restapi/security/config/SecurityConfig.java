@@ -3,12 +3,16 @@ package com.opendevup.shop.adapters.restapi.security.config;
 import com.opendevup.shop.adapters.restapi.security.jwt.JwtTokenAuthenticationFilter;
 import com.opendevup.shop.adapters.restapi.security.jwt.JwtTokenProvider;
 import com.opendevup.shop.application.gateways.UserDsGateway;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
@@ -23,20 +27,27 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Configuration
+@EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
+@RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
+    public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
                                                 JwtTokenProvider tokenProvider,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager) {
+        log.info("Init security web filter ...");
         final String PATH_API = "/api/**";
 
         return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(ServerHttpSecurity.CorsSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(it -> it
+                        .pathMatchers(HttpMethod.GET, PATH_API).permitAll()
+                        .pathMatchers(HttpMethod.DELETE, PATH_API).hasRole("ADMIN")
                         .pathMatchers(PATH_API).authenticated()
                         .pathMatchers("/me").authenticated()
                         .pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
@@ -75,5 +86,4 @@ public class SecurityConfig {
         authenticationManager.setPasswordEncoder(passwordEncoder);
         return authenticationManager;
     }
-
 }
