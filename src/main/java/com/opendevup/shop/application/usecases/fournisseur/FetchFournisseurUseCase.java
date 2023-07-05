@@ -6,7 +6,8 @@ import com.opendevup.shop.application.usecases.UseCase;
 import com.opendevup.shop.domain.Fournisseur;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,8 @@ public class FetchFournisseurUseCase implements UseCase<Long> {
 
     @Override
     public void execute(Long id) {
-        Mono<Fournisseur> response = fournisseurDsGateway.findById(id);
-        presenter.present(response);
+        Optional<Fournisseur> response = fournisseurDsGateway.findById(id);
+        if(response.isPresent())
+            presenter.present(response.get());
     }
 }

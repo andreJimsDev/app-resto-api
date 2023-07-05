@@ -1,6 +1,8 @@
 package com.opendevup.shop.adapters.persistence.produit;
 
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface JpaProduitRepository extends R2dbcRepository<ProduitEntity, Long> {
+@Repository
+public interface JpaProduitRepository extends JpaRepository<ProduitEntity, Long> {
 }

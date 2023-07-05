@@ -4,20 +4,25 @@ import com.opendevup.shop.application.presenters.fournisseur.FournisseurViewMode
 import com.opendevup.shop.application.presenters.fournisseur.FournisseursOutputBoundary;
 import com.opendevup.shop.domain.Fournisseur;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FournisseursPresenter extends BaseFournisseur implements FournisseursOutputBoundary {
 
-    private Flux<FournisseurViewModel> viewModel;
+    private List<FournisseurViewModel> viewModel;
 
     @Override
-    public Flux<FournisseurViewModel> getViewModel() {
+    public List<FournisseurViewModel> getViewModel() {
         return viewModel;
     }
 
     @Override
-    public void present(Flux<Fournisseur> response) {
-        viewModel = response.map(this::mapToFournisseurViewModel);
+    public void present(List<Fournisseur> response) {
+        viewModel = response
+                .stream()
+                .map(this::mapToFournisseurViewModel)
+                .collect(Collectors.toList());
     }
 }

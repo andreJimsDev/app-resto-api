@@ -1,16 +1,15 @@
 package com.opendevup.shop.application.gateways;
 
 import com.opendevup.shop.domain.Categorie;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface CategorieDsGateway {
-    Mono<Categorie> save(Categorie categorie);
-    Flux<Categorie> findAll();
-    Flux<Categorie> findByParent(Long parent);
-    Mono<Long> count();
-
-    Mono<Void> delete(Long id);
-
-    Mono<Categorie> findById(Long id);
+    Categorie save(Categorie categorie);
+    List<Categorie> findAll();
+    List<Categorie> findByParent(Long parent);
+    Long count();
+    void delete(Long id);
+    Optional<Categorie> findById(Long id);
 }

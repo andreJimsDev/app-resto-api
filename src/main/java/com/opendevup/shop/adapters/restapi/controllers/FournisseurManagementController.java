@@ -1,6 +1,6 @@
 package com.opendevup.shop.adapters.restapi.controllers;
 
-import com.opendevup.shop.application.presenters.DeleteOutputBoundary;
+import com.github.javafaker.Faker;
 import com.opendevup.shop.application.presenters.fournisseur.FournisseurOutputBoundary;
 import com.opendevup.shop.application.presenters.fournisseur.FournisseurViewModel;
 import com.opendevup.shop.application.presenters.fournisseur.FournisseursOutputBoundary;
@@ -22,15 +22,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import com.github.javafaker.Faker;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/fournisseurs")
 @RequiredArgsConstructor
 @Validated
-public class FournisseurController {
+public class FournisseurManagementController {
 
     private final CreateFournisseurUseCase createFournisseurUseCase;
     private final UpdateFournisseurUseCase updateFournisseurUseCase;
@@ -39,69 +38,62 @@ public class FournisseurController {
     private final FetchFournisseursUseCase fetchFournisseursUseCase;
     private final FournisseurOutputBoundary fournisseurPresenter;
     private final FournisseursOutputBoundary fournisseursPresenter;
-    private final DeleteOutputBoundary deletePresenter;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("")
-    public Mono<FournisseurViewModel> create(@RequestBody Mono<CreateFournisseurRequest> request) {
+    public FournisseurViewModel create(@RequestBody CreateFournisseurRequest request) {
         createFournisseurUseCase.execute(request);
         return fournisseurPresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("")
-    public Mono<FournisseurViewModel> update(@RequestBody Mono<UpdateFournisseurRequest> request) {
+    public FournisseurViewModel update(@RequestBody UpdateFournisseurRequest request) {
         updateFournisseurUseCase.execute(request);
         return fournisseurPresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         deleteFournisseurUseCase.execute(id);
-        return deletePresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public Mono<FournisseurViewModel> getById(@PathVariable("id") Long id) {
+    public FournisseurViewModel getById(@PathVariable("id") Long id) {
         fetchFournisseurUseCase.execute(id);
         return fournisseurPresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("")
-    public Flux<FournisseurViewModel> getAll() {
+    public List<FournisseurViewModel> getAll() {
         fetchFournisseursUseCase.execute("");
         return fournisseursPresenter.getViewModel();
     }
 
     @GetMapping("/init")
-    public Mono<String> initData() {
+    public String initData() {
         int i = 0;
         Faker faker = new Faker();
         while (i < 6) {
-            createFournisseurUseCase.execute(
-                    Mono.just(
-                            CreateFournisseurRequest.builder()
-                                    .nom(faker.commerce().department())
-                                    .contact(faker.address().streetName())
-                                    .adresse(faker.address().streetAddress())
-                                    .ville(faker.address().city())
-                                    .codePostal(faker.address().zipCode())
-                                    .tel1(faker.phoneNumber().phoneNumber())
-                                    .tel2(faker.phoneNumber().phoneNumber())
-                                    .fax(faker.phoneNumber().cellPhone())
-                                    .numeroCompte(faker.finance().iban())
-                                    .email(faker.internet().emailAddress())
-                                    .remarques(faker.lorem().sentence())
-                                    .numeroTva(faker.idNumber().ssnValid())
-                                    .build()
-                    )
-            );
-            fournisseurPresenter.getViewModel().subscribe();
+            createFournisseurUseCase.execute(CreateFournisseurRequest.builder()
+                    .nom(faker.commerce().department())
+                    .contact(faker.address().streetName())
+                    .adresse(faker.address().streetAddress())
+                    .ville(faker.address().city())
+                    .codePostal(faker.address().zipCode())
+                    .tel1(faker.phoneNumber().phoneNumber())
+                    .tel2(faker.phoneNumber().phoneNumber())
+                    .fax(faker.phoneNumber().cellPhone())
+                    .numeroCompte(faker.finance().iban())
+                    .email(faker.internet().emailAddress())
+                    .remarques(faker.lorem().sentence())
+                    .numeroTva(faker.idNumber().ssnValid())
+                    .build());
             i++;
         }
-        return Mono.just("init fournisseur done!");
+        return "init fournisseur done!";
     }
 }

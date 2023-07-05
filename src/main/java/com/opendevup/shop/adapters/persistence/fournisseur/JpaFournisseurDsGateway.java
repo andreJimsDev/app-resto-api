@@ -4,8 +4,10 @@ import com.opendevup.shop.application.gateways.FournisseurDsGateway;
 import com.opendevup.shop.domain.Fournisseur;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,26 +16,31 @@ public class JpaFournisseurDsGateway implements FournisseurDsGateway {
     private final JpaFournisseurRepository jpaFournisseurRepository;
 
     @Override
-    public Mono<Fournisseur> save(Fournisseur fournisseur) {
-        return jpaFournisseurRepository.save(
-                FournisseurEntityMapper.toEntity(fournisseur)
-        ).map(FournisseurEntityMapper::toDomain);
+    public Fournisseur save(Fournisseur fournisseur) {
+        return FournisseurEntityMapper.toDomain(
+                jpaFournisseurRepository.save(
+                        FournisseurEntityMapper.toEntity(fournisseur)
+                )
+        );
     }
 
     @Override
-    public Flux<Fournisseur> findAll() {
+    public List<Fournisseur> findAll() {
         return jpaFournisseurRepository.findAll()
-                .map(FournisseurEntityMapper::toDomain);
+                .stream()
+                .map(FournisseurEntityMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
-        return jpaFournisseurRepository.deleteById(id);
+    public void delete(Long id) {
+        jpaFournisseurRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Fournisseur> findById(Long id) {
-        return jpaFournisseurRepository.findById(id)
-                .map(FournisseurEntityMapper::toDomain);
+    public Optional<Fournisseur> findById(Long id) {
+        return  jpaFournisseurRepository.findById(
+                id
+        ).map(FournisseurEntityMapper::toDomain);
     }
 }

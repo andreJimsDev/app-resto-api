@@ -1,7 +1,6 @@
 package com.opendevup.shop.adapters.restapi.controllers;
 
 import com.github.javafaker.Faker;
-import com.opendevup.shop.application.presenters.DeleteOutputBoundary;
 import com.opendevup.shop.application.presenters.categorie.CategorieDetailOutputBoundary;
 import com.opendevup.shop.application.presenters.categorie.CategorieDetailViewModel;
 import com.opendevup.shop.application.presenters.categorie.CategorieOutputBoundary;
@@ -26,14 +25,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Validated
-public class CategorieController {
+public class CategorieManagementController {
 
     private final CreateCategorieUseCase createCategorieUseCase;
     private final UpdateCategorieUseCase updateCategorieUseCase;
@@ -43,58 +42,53 @@ public class CategorieController {
     private final CategorieOutputBoundary categoriePresenter;
     private final CategoriesOutputBoundary categoriesPresenter;
     private final CategorieDetailOutputBoundary categorieDetailPresenter;
-    private final DeleteOutputBoundary deletePresenter;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("")
-    public Mono<CategorieViewModel> create(@RequestBody Mono<CreateCategorieRequest> request) {
+    public CategorieViewModel create(@RequestBody CreateCategorieRequest request) {
         createCategorieUseCase.execute(request);
         return categoriePresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("")
-    public Mono<CategorieViewModel> update(@RequestBody Mono<UpdateCategorieRequest> request) {
+    public CategorieViewModel update(@RequestBody UpdateCategorieRequest request) {
         updateCategorieUseCase.execute(request);
         return categoriePresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         deleteCategorieUseCase.execute(id);
-        return deletePresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
-    public Mono<CategorieDetailViewModel> getById(@PathVariable("id") Long id) {
+    public CategorieDetailViewModel getById(@PathVariable("id") Long id) {
         fetchCategorieUseCase.execute(id);
         return categorieDetailPresenter.getViewModel();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("")
-    public Flux<CategorieViewModel> getAll(@RequestParam(value = "parent", required = false) Long parent) {
+    public List<CategorieViewModel> getAll(@RequestParam(value = "parent", required = false) Long parent) {
         fetchCategoriesUseCase.execute(parent);
         return categoriesPresenter.getViewModel();
     }
 
     @GetMapping("/init")
-    public Mono<String> initData() {
+    public String initData() {
         int i = 0;
         Faker faker = new Faker();
         while (i < 6) {
             createCategorieUseCase.execute(
-                    Mono.just(
-                            CreateCategorieRequest.builder()
-                                    .nom(faker.food().dish())
-                                    .build()
-                    )
+                    CreateCategorieRequest.builder()
+                            .nom(faker.food().dish())
+                            .build()
             );
-            categoriePresenter.getViewModel().subscribe();
             i++;
         }
-        return Mono.just("init categorie done!");
+        return "init categorie done!";
     }
 }

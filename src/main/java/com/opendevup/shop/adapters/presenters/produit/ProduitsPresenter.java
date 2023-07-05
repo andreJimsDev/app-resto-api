@@ -4,20 +4,25 @@ import com.opendevup.shop.application.presenters.produit.ProduitViewModel;
 import com.opendevup.shop.application.presenters.produit.ProduitsOutputBoundary;
 import com.opendevup.shop.domain.Produit;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProduitsPresenter extends BaseProduit implements ProduitsOutputBoundary {
 
-    private Flux<ProduitViewModel> viewModel;
+    private List<ProduitViewModel> viewModel;
 
     @Override
-    public Flux<ProduitViewModel> getViewModel() {
+    public List<ProduitViewModel> getViewModel() {
         return viewModel;
     }
 
     @Override
-    public void present(Flux<Produit> response) {
-        viewModel = response.map(this::mapToProduitViewModel);
+    public void present(List<Produit> response) {
+        viewModel = response
+                .stream()
+                .map(this::mapToProduitViewModel)
+                .collect(Collectors.toList());
     }
 }

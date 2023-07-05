@@ -6,7 +6,8 @@ import com.opendevup.shop.application.usecases.UseCase;
 import com.opendevup.shop.domain.Categorie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class FetchCategoriesUseCase implements UseCase<Long> {
 
     @Override
     public void execute(Long parent) {
-        Flux<Categorie> response;
+        List<Categorie> response;
         if (parent != null) {
             response = categorieDsGateway.findByParent(parent);
         } else {

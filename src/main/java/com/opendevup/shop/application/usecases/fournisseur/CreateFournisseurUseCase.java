@@ -6,19 +6,18 @@ import com.opendevup.shop.application.usecases.UseCase;
 import com.opendevup.shop.domain.Fournisseur;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class CreateFournisseurUseCase implements UseCase<Mono<CreateFournisseurRequest>> {
+public class CreateFournisseurUseCase implements UseCase<CreateFournisseurRequest> {
 
     private final FournisseurDsGateway fournisseurDsGateway;
     private final FournisseurOutputBoundary presenter;
 
     @Override
-    public void execute(Mono<CreateFournisseurRequest> createFournisseurRequest) {
-        Mono<Fournisseur> response = createFournisseurRequest.flatMap(
-                request -> fournisseurDsGateway.save(
+    public void execute(CreateFournisseurRequest request) {
+        presenter.present(
+                fournisseurDsGateway.save(
                         Fournisseur.builder()
                                 .nom(request.getNom())
                                 .contact(request.getContact())
@@ -35,6 +34,5 @@ public class CreateFournisseurUseCase implements UseCase<Mono<CreateFournisseurR
                                 .build()
                 )
         );
-        presenter.present(response);
     }
 }

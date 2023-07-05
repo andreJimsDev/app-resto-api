@@ -1,14 +1,15 @@
 package com.opendevup.shop.application.gateways;
 
 import com.opendevup.shop.domain.Fournisseur;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface FournisseurDsGateway {
-    Mono<Fournisseur> save(Fournisseur fournisseur);
-    Flux<Fournisseur> findAll();
+    Fournisseur save(Fournisseur fournisseur);
+    List<Fournisseur> findAll();
 
-    Mono<Void> delete(Long id);
+    void delete(Long id);
 
-    Mono<Fournisseur> findById(Long id);
+    Optional<Fournisseur> findById(Long id);
 }

@@ -19,8 +19,8 @@ public class Produit {
     private boolean demandeCuisson;
     private boolean demandeAccompagnement;
     private boolean gererStock;
-    private Long categorieId;
-    private Long fournisseurId;
+    private Categorie categorie;
+    private Fournisseur fournisseur;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 }

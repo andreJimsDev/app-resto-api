@@ -1,10 +1,19 @@
 package com.opendevup.shop.application.presenters.fournisseur;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.With;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-@Getter
+@Data
+@EqualsAndHashCode(callSuper = false)
+@SuperBuilder(toBuilder = true)
+@With
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FournisseurViewModel {
     private Long id;
     private String nom;

@@ -1,14 +1,19 @@
 package com.opendevup.shop.application.usecases.fournisseur;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.With;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@Builder
+@Data
+@EqualsAndHashCode(callSuper = false)
+@SuperBuilder(toBuilder = true)
+@With
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateFournisseurRequest {
     private Long id;
     private String nom;

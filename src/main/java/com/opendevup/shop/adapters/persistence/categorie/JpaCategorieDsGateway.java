@@ -4,8 +4,10 @@ import com.opendevup.shop.application.gateways.CategorieDsGateway;
 import com.opendevup.shop.domain.Categorie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,37 +16,43 @@ public class JpaCategorieDsGateway implements CategorieDsGateway {
     private final JpaCategorieRepository jpaCategorieRepository;
 
     @Override
-    public Mono<Categorie> save(Categorie categorie) {
-        return jpaCategorieRepository.save(
-                CategorieEntityMapper.toEntity(categorie)
-        ).map(CategorieEntityMapper::toDomain);
+    public Categorie save(Categorie categorie) {
+        return CategorieEntityMapper.toDomain(
+                jpaCategorieRepository.save(
+                        CategorieEntityMapper.toEntity(categorie)
+                )
+        );
     }
 
     @Override
-    public Flux<Categorie> findAll() {
+    public List<Categorie> findAll() {
         return jpaCategorieRepository.findByParentIsNull()
-                .map(CategorieEntityMapper::toDomain);
+                .stream()
+                .map(CategorieEntityMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Flux<Categorie> findByParent(Long parent) {
+    public List<Categorie> findByParent(Long parent) {
         return jpaCategorieRepository.findByParent(parent)
-                .map(CategorieEntityMapper::toDomain);
+                .stream()
+                .map(CategorieEntityMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Mono<Long> count() {
+    public Long count() {
         return jpaCategorieRepository.count();
     }
 
     @Override
-    public Mono<Void> delete(Long id) {
-        return jpaCategorieRepository.deleteById(id);
+    public void delete(Long id) {
+        jpaCategorieRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Categorie> findById(Long id) {
-       return jpaCategorieRepository.findById(id)
+    public Optional<Categorie> findById(Long id) {
+        return jpaCategorieRepository.findById(id)
                 .map(CategorieEntityMapper::toDomain);
     }
 }

@@ -1,26 +1,39 @@
 package com.opendevup.shop.application.usecases.produit;
 
+import com.opendevup.shop.application.gateways.CategorieDsGateway;
+import com.opendevup.shop.application.gateways.FournisseurDsGateway;
 import com.opendevup.shop.application.gateways.ProduitDsGateway;
 import com.opendevup.shop.application.presenters.produit.ProduitOutputBoundary;
 import com.opendevup.shop.application.usecases.UseCase;
+import com.opendevup.shop.domain.Categorie;
+import com.opendevup.shop.domain.Fournisseur;
 import com.opendevup.shop.domain.Produit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateProduitUseCase implements UseCase<Mono<UpdateProduitRequest>> {
+public class UpdateProduitUseCase implements UseCase<UpdateProduitRequest> {
 
     private final ProduitDsGateway updateProduitRequestDsGateway;
+    private final CategorieDsGateway categorieDsGateway;
+    private final FournisseurDsGateway fournisseurDsGateway;
     private final ProduitOutputBoundary presenter;
 
     @Override
-    public void execute(Mono<UpdateProduitRequest> updateProduitRequest) {
-        Mono<Produit> response = updateProduitRequest.flatMap(
-                request -> updateProduitRequestDsGateway.save(
+    public void execute(UpdateProduitRequest request) {
+        Categorie categorie = categorieDsGateway.findById(
+                request.getCategorieId()
+        ).orElseThrow(() -> new RuntimeException("Categorie is not found"));
+        Fournisseur fournisseur = null;
+        if (request.getFournisseurId() != null)
+            fournisseur = fournisseurDsGateway.findById(
+                    request.getFournisseurId()
+            ).orElseThrow(() -> new RuntimeException("Fournisseur is not found"));
+        presenter.present(
+                updateProduitRequestDsGateway.save(
                         Produit.builder()
                                 .id(request.getId())
                                 .designation(request.getDesignation())
@@ -33,12 +46,11 @@ public class UpdateProduitUseCase implements UseCase<Mono<UpdateProduitRequest>>
                                 .demandeCuisson(request.isDemandeCuisson())
                                 .demandeAccompagnement(request.isDemandeAccompagnement())
                                 .gererStock(request.isGererStock())
-                                .categorieId(request.getCategorieId())
-                                .fournisseurId(request.getFournisseurId())
+                                .categorie(categorie)
+                                .fournisseur(fournisseur)
                                 .updatedAt(LocalDate.now())
                                 .build()
                 )
         );
-        presenter.present(response);
     }
 }

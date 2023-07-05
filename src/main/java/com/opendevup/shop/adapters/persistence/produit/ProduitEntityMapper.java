@@ -1,5 +1,7 @@
 package com.opendevup.shop.adapters.persistence.produit;
 
+import com.opendevup.shop.adapters.persistence.categorie.CategorieEntityMapper;
+import com.opendevup.shop.adapters.persistence.fournisseur.FournisseurEntityMapper;
 import com.opendevup.shop.domain.Produit;
 
 public class ProduitEntityMapper {
@@ -16,30 +18,30 @@ public class ProduitEntityMapper {
                 .demandeCuisson(produitEntity.isDemandeCuisson())
                 .demandeAccompagnement(produitEntity.isDemandeAccompagnement())
                 .gererStock(produitEntity.isGererStock())
-                .categorieId(produitEntity.getCategorieId())
-                .fournisseurId(produitEntity.getFournisseurId())
+                .categorie(CategorieEntityMapper.toDomain(produitEntity.getCategorie()))
+                .fournisseur(FournisseurEntityMapper.toDomain(produitEntity.getFournisseur()))
                 .createdAt(produitEntity.getCreatedAt())
                 .updatedAt(produitEntity.getUpdatedAt())
                 .build();
     }
 
     public static ProduitEntity toEntity(Produit produit) {
-        ProduitEntity produitEntity = new ProduitEntity();
-        produitEntity.setId(produit.getId());
-        produitEntity.setDesignation(produit.getDesignation());
-        produitEntity.setPrixVente(produit.getPrixVente());
-        produitEntity.setPrixEmporte(produit.getPrixEmporte());
-        produitEntity.setPrixAchat(produit.getPrixAchat());
-        produitEntity.setQteStock(produit.getQteStock());
-        produitEntity.setQteMin(produit.getQteMin());
-        produitEntity.setRefArticleFournisseur(produit.getRefArticleFournisseur());
-        produitEntity.setDemandeCuisson(produit.isDemandeCuisson());
-        produitEntity.setDemandeAccompagnement(produit.isDemandeAccompagnement());
-        produitEntity.setGererStock(produit.isGererStock());
-        produitEntity.setCategorieId(produit.getCategorieId());
-        produitEntity.setFournisseurId(produit.getFournisseurId());
-        produitEntity.setCreatedAt(produit.getCreatedAt());
-        produitEntity.setUpdatedAt(produit.getUpdatedAt());
-        return produitEntity;
+        return ProduitEntity.builder()
+                .id(produit.getId())
+                .designation(produit.getDesignation())
+                .prixVente(produit.getPrixVente())
+                .prixEmporte(produit.getPrixEmporte())
+                .prixAchat(produit.getPrixAchat())
+                .qteStock(produit.getQteStock())
+                .qteMin(produit.getQteMin())
+                .refArticleFournisseur(produit.getRefArticleFournisseur())
+                .demandeCuisson(produit.isDemandeCuisson())
+                .demandeAccompagnement(produit.isDemandeAccompagnement())
+                .gererStock(produit.isGererStock())
+                .categorie(CategorieEntityMapper.toEntity(produit.getCategorie()))
+                .fournisseur(FournisseurEntityMapper.toEntity(produit.getFournisseur()))
+                .createdAt(produit.getCreatedAt())
+                .updatedAt(produit.getUpdatedAt())
+                .build();
     }
 }

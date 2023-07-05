@@ -1,9 +1,12 @@
 package com.opendevup.shop.adapters.persistence.categorie;
 
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import reactor.core.publisher.Flux;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface JpaCategorieRepository extends R2dbcRepository<CategorieEntity, Long> {
-    Flux<CategorieEntity> findByParent(Long parent);
-    Flux<CategorieEntity> findByParentIsNull();
+import java.util.List;
+
+@Repository
+public interface JpaCategorieRepository extends JpaRepository<CategorieEntity, Long> {
+    List<CategorieEntity> findByParent(Long parent);
+    List<CategorieEntity> findByParentIsNull();
 }

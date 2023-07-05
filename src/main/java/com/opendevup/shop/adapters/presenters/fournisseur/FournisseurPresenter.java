@@ -4,20 +4,19 @@ import com.opendevup.shop.application.presenters.fournisseur.FournisseurOutputBo
 import com.opendevup.shop.application.presenters.fournisseur.FournisseurViewModel;
 import com.opendevup.shop.domain.Fournisseur;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 public class FournisseurPresenter extends BaseFournisseur implements FournisseurOutputBoundary {
 
-    private Mono<FournisseurViewModel> viewModel;
+    private FournisseurViewModel viewModel;
 
     @Override
-    public Mono<FournisseurViewModel> getViewModel() {
+    public FournisseurViewModel getViewModel() {
         return viewModel;
     }
 
     @Override
-    public void present(Mono<Fournisseur> response) {
-        viewModel = response.map(this::mapToFournisseurViewModel);
+    public void present(Fournisseur response) {
+        viewModel = mapToFournisseurViewModel(response);
     }
 }

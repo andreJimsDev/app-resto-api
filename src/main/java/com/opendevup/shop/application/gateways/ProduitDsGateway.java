@@ -1,14 +1,15 @@
 package com.opendevup.shop.application.gateways;
 
 import com.opendevup.shop.domain.Produit;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ProduitDsGateway {
-    Mono<Produit> save(Produit produit);
-    Flux<Produit> findAll();
+    Produit save(Produit produit);
+    List<Produit> findAll();
 
-    Mono<Void> delete(Long id);
+    void delete(Long id);
 
-    Mono<Produit> findById(Long id);
+    Optional<Produit> findById(Long id);
 }

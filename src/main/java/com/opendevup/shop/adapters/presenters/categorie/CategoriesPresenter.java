@@ -4,28 +4,25 @@ import com.opendevup.shop.application.presenters.categorie.CategorieViewModel;
 import com.opendevup.shop.application.presenters.categorie.CategoriesOutputBoundary;
 import com.opendevup.shop.domain.Categorie;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class CategoriesPresenter implements CategoriesOutputBoundary {
+public class CategoriesPresenter extends BaseCategorie implements CategoriesOutputBoundary {
 
-    private Flux<CategorieViewModel> viewModel;
+    private List<CategorieViewModel> viewModel;
 
     @Override
-    public Flux<CategorieViewModel> getViewModel() {
+    public List<CategorieViewModel> getViewModel() {
         return viewModel;
     }
 
     @Override
-    public void present(Flux<Categorie> response) {
-        viewModel = response.map(this::mapToCategorieViewModel);
-    }
-
-    private CategorieViewModel mapToCategorieViewModel(Categorie categorie) {
-        return CategorieViewModel.builder()
-                .id(categorie.getId())
-                .nom(categorie.getNom())
-                .parent(categorie.getParent())
-                .build();
+    public void present(List<Categorie> response) {
+        viewModel = response
+                .stream()
+                .map(this::mapToCategorieViewModel)
+                .collect(Collectors.toList());
     }
 }

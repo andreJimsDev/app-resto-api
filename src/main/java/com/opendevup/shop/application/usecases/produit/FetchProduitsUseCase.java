@@ -6,7 +6,8 @@ import com.opendevup.shop.application.usecases.UseCase;
 import com.opendevup.shop.domain.Produit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class FetchProduitsUseCase implements UseCase<String> {
 
     @Override
     public void execute(String request) {
-        Flux<Produit> response = produitDsGateway.findAll();
+        List<Produit> response = produitDsGateway.findAll();
         presenter.present(response);
     }
 }

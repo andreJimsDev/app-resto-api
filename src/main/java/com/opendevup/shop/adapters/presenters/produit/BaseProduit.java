@@ -19,8 +19,8 @@ public class BaseProduit {
                 .demandeCuisson(produit.isDemandeCuisson())
                 .demandeAccompagnement(produit.isDemandeAccompagnement())
                 .gererStock(produit.isGererStock())
-                .categorieId(produit.getCategorieId())
-                .fournisseurId(produit.getFournisseurId())
+                .categorie(produit.getCategorie())
+                .fournisseur(produit.getFournisseur())
                 .createdAt(produit.getCreatedAt())
                 .updatedAt(produit.getUpdatedAt())
                 .build();

@@ -1,8 +1,12 @@
 package com.opendevup.shop.adapters.persistence.user;
 
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import reactor.core.publisher.Mono;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface JpaUserRepository extends R2dbcRepository<UserEntity, Long> {
-    Mono<UserEntity> findByUsername(String username);
+import java.util.Optional;
+
+@Repository
+public interface JpaUserRepository extends JpaRepository<UserEntity, Long> {
+    Optional<UserEntity> findByUsername(String username);
+    Boolean existsByUsername(String username);
 }
