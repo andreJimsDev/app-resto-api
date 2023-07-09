@@ -2,6 +2,9 @@ package com.opendevup.shop.application.gateways;
 
 import com.opendevup.shop.domain.User;
 
+import java.util.Optional;
+
 public interface UserDsGateway {
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
+    User save(User user);
 }

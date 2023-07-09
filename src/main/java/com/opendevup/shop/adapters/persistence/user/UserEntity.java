@@ -1,5 +1,6 @@
 package com.opendevup.shop.adapters.persistence.user;
 
+import com.opendevup.shop.adapters.persistence.role.RoleEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

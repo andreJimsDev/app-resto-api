@@ -12,6 +12,7 @@ import com.opendevup.shop.application.usecases.produit.FetchProduitsUseCase;
 import com.opendevup.shop.application.usecases.produit.UpdateProduitRequest;
 import com.opendevup.shop.application.usecases.produit.UpdateProduitUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,6 +62,7 @@ public class ProduitManagementController {
         return produitPresenter.getViewModel();
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     @GetMapping("")
     public List<ProduitViewModel> getAll() {
         fetchProduitsUseCase.execute("");

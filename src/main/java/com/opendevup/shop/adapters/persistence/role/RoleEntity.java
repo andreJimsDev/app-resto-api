@@ -1,4 +1,4 @@
-package com.opendevup.shop.adapters.persistence.user;
+package com.opendevup.shop.adapters.persistence.role;
 
 import com.opendevup.shop.domain.ERole;
 import jakarta.persistence.Column;
